@@ -1,6 +1,10 @@
-public struct SwiftUITimeTable {
-    public private(set) var text = "Hello, World!"
+import SwiftUI
 
-    public init() {
-    }
+public struct EventInfo {
+    let date: Date
+    let startHour: Int
+    let endHour: Int
+
+    let cellWidth: CGFloat?
+    let cellHeight: CGFloat?
 }
