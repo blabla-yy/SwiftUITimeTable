@@ -1,8 +1,5 @@
 //
-//  SwiftUIView.swift
-//
-//
-//  Created by 王跃洋 on 2021/10/10.
+//  WeekGridView.swift
 //
 
 import SwiftUI
@@ -99,7 +96,9 @@ struct WeekGridView<HeaderView, WeekView, EventView>: View
                                       VStack {
                                           Text("\(hour):00")
                                               .font(.footnote)
+                                              .foreground(Color.secondary)
                                       }
+                                      
                                       ForEach(days, id: \.self) { day in
                                           eventView(
                                               EventInfo(date: day, startHour: hour, endHour: hour + 1, cellWidth: width, cellHeight: height)

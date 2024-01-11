@@ -1,8 +1,5 @@
 //
-//  SwiftUIView.swift
-//
-//
-//  Created by 王跃洋 on 2021/10/9.
+//  TimeTableView.swift
 //
 
 import SwiftUI
@@ -30,15 +27,121 @@ class TimeTableState: ObservableObject {
 }
 
 extension TimeTableView where HeaderContent == DefaultHeaderView, WeekContent == DefaultWeekView, EventContent == DefaultEventView {
-    public init() {
+    public init(eventCellHeight: CGFloat? = 80,
+                timeCellWidth: CGFloat? = nil,
+                timeRange: Range<Int> = 0 ..< 25,
+                weekRange: Range<Int> = 1 ..< 8) {
         self.init(
             headerView: { DefaultHeaderView(date: $0) },
             weekView: {
                 DefaultWeekView(date: $0)
             },
-            eventView: { DefaultEventView(info: $0)
-            }
+            eventView: { _ in DefaultEventView()
+            },
+            eventCellHeight: eventCellHeight,
+            timeCellWidth: timeCellWidth,
+            timeRange: timeRange,
+            weekRange: weekRange
         )
+    }
+}
+
+extension TimeTableView where WeekContent == DefaultWeekView, EventContent == DefaultEventView {
+    public init(headerView: @escaping (Date) -> HeaderContent,
+                eventCellHeight: CGFloat? = 80,
+                timeCellWidth: CGFloat? = nil,
+                timeRange: Range<Int> = 0 ..< 25,
+                weekRange: Range<Int> = 1 ..< 8) {
+        self.init(headerView: headerView,
+                  weekView: { DefaultWeekView(date: $0) },
+                  eventView: { _ in DefaultEventView() },
+                  eventCellHeight: eventCellHeight,
+                  timeCellWidth: timeCellWidth,
+                  timeRange: timeRange,
+                  weekRange: weekRange)
+    }
+}
+
+extension TimeTableView where HeaderContent == DefaultHeaderView, EventContent == DefaultEventView {
+    public init(weekView: @escaping (Date) -> WeekContent,
+                eventCellHeight: CGFloat? = 80,
+                timeCellWidth: CGFloat? = nil,
+                timeRange: Range<Int> = 0 ..< 25,
+                weekRange: Range<Int> = 1 ..< 8) {
+        self.init(headerView: { DefaultHeaderView(date: $0) },
+                  weekView: weekView,
+                  eventView: { _ in DefaultEventView() },
+                  eventCellHeight: eventCellHeight,
+                  timeCellWidth: timeCellWidth,
+                  timeRange: timeRange,
+                  weekRange: weekRange)
+    }
+}
+
+extension TimeTableView where HeaderContent == DefaultHeaderView, WeekContent == DefaultWeekView {
+    public init(eventView: @escaping (EventInfo) -> EventContent,
+                eventCellHeight: CGFloat? = 80,
+                timeCellWidth: CGFloat? = nil,
+                timeRange: Range<Int> = 0 ..< 25,
+                weekRange: Range<Int> = 1 ..< 8) {
+        self.init(headerView: { DefaultHeaderView(date: $0) },
+                  weekView: { DefaultWeekView(date: $0) },
+                  eventView: eventView,
+                  eventCellHeight: eventCellHeight,
+                  timeCellWidth: timeCellWidth,
+                  timeRange: timeRange,
+                  weekRange: weekRange)
+    }
+}
+
+extension TimeTableView where HeaderContent == DefaultHeaderView {
+    public init(weekView: @escaping (Date) -> WeekContent,
+                eventView: @escaping (EventInfo) -> EventContent,
+                eventCellHeight: CGFloat? = 80,
+                timeCellWidth: CGFloat? = nil,
+                timeRange: Range<Int> = 0 ..< 25,
+                weekRange: Range<Int> = 1 ..< 8) {
+        self.init(headerView: { DefaultHeaderView(date: $0) },
+                  weekView: weekView,
+                  eventView: eventView,
+                  eventCellHeight: eventCellHeight,
+                  timeCellWidth: timeCellWidth,
+                  timeRange: timeRange,
+                  weekRange: weekRange)
+    }
+}
+
+extension TimeTableView where WeekContent == DefaultWeekView {
+    public init(headerView: @escaping (Date) -> HeaderContent,
+                eventView: @escaping (EventInfo) -> EventContent,
+                eventCellHeight: CGFloat? = 80,
+                timeCellWidth: CGFloat? = nil,
+                timeRange: Range<Int> = 0 ..< 25,
+                weekRange: Range<Int> = 1 ..< 8) {
+        self.init(headerView: headerView,
+                  weekView: { DefaultWeekView(date: $0) },
+                  eventView: eventView,
+                  eventCellHeight: eventCellHeight,
+                  timeCellWidth: timeCellWidth,
+                  timeRange: timeRange,
+                  weekRange: weekRange)
+    }
+}
+
+extension TimeTableView where EventContent == DefaultEventView {
+    public init(headerView: @escaping (Date) -> HeaderContent,
+                weekView: @escaping (Date) -> WeekContent,
+                eventCellHeight: CGFloat? = 80,
+                timeCellWidth: CGFloat? = nil,
+                timeRange: Range<Int> = 0 ..< 25,
+                weekRange: Range<Int> = 1 ..< 8) {
+        self.init(headerView: headerView,
+                  weekView: weekView,
+                  eventView: { _ in DefaultEventView() },
+                  eventCellHeight: eventCellHeight,
+                  timeCellWidth: timeCellWidth,
+                  timeRange: timeRange,
+                  weekRange: weekRange)
     }
 }
 
@@ -48,7 +151,7 @@ public struct TimeTableView<HeaderContent, WeekContent, EventContent>: View
     public typealias WeekGen = (Date) -> WeekContent
     public typealias EventGen = (EventInfo) -> EventContent
 
-    @ObservedObject var timeTableState: TimeTableState
+    @StateObject var timeTableState: TimeTableState
     @Environment(\.calendar) var calendar
     let headerView: HeaderGen
     let weekView: WeekGen
@@ -68,7 +171,7 @@ public struct TimeTableView<HeaderContent, WeekContent, EventContent>: View
         weekRange: Range<Int> = 1 ..< 8 // weekday 1: SUN, 7:SAT
     ) {
         let calendar: Environment<Calendar> = .init(\.calendar)
-        _timeTableState = .init(initialValue: TimeTableState(calendar: calendar.wrappedValue))
+        _timeTableState = .init(wrappedValue: TimeTableState(calendar: calendar.wrappedValue))
         _calendar = calendar
         self.eventView = eventView
         self.weekView = weekView

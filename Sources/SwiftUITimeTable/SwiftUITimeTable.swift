@@ -1,10 +1,10 @@
 import SwiftUI
 
 public struct EventInfo {
-    let date: Date
-    let startHour: Int
-    let endHour: Int
+    public let date: Date
+    public let startHour: Int
+    public let endHour: Int
 
-    let cellWidth: CGFloat?
-    let cellHeight: CGFloat?
+    public let cellWidth: CGFloat?
+    public let cellHeight: CGFloat?
 }
