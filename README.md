@@ -8,5 +8,6 @@
 - 支持定制各种参数，包括展示一周的天数，时间段等。
 
 ## 预览
-![TimeTableV](https://github.com/QaQAdrian/SwiftUITimeTable/blob/main/TimeTableV.gif)
-![TimeTableH](https://github.com/QaQAdrian/SwiftUITimeTable/blob/main/TimeTableH.gif)
+![TimeTableV](https://github.com/blabla-yy/SwiftUITimeTable/blob/main/TimeTableV.gif)
+![TimeTableH](https://github.com/blabla-yy/SwiftUITimeTable/blob/main/TimeTableH.gif)
+![TimeTableH](https://github.com/blabla-yy/SwiftUITimeTable/blob/main/screenshot.png)
