@@ -20,24 +20,23 @@ struct EventView: View {
                 .border(width: 1, edges: cell.borderEdge, color: .gray)
 
             if course != nil {
-                VStack {
-                    Text(existedCourse.title)
-                        .font(.caption)
-                        .foregroundStyle(.white)
-                        .padding(.top, 4)
-
-                    Spacer()
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(
-                    RoundedRectangle(cornerRadius: 6, style: .continuous)
-                        .fill(existedCourse.color.opacity(0.5))
-                        .stroke(existedCourse.color)
-                )
-                .offset(y: cell.eventOffset(eventStartTime: course!.startTime))
-                .padding(2)
+                RoundedRectangle(cornerRadius: 6, style: .continuous)
+                    .fill(existedCourse.color)
+                    .frame(height: cell.eventHeight(eventStartTime: course!.startTime, eventEndTime: course!.endTime))
+                    .frame(maxWidth: .infinity)
+                    .overlay {
+                        VStack {
+                            Text(existedCourse.title)
+                                .font(.caption)
+                                .foregroundStyle(.white)
+                                .padding(.top, 4)
+                            Spacer()
+                        }
+                    }
+                    .offset(y: cell.eventOffset(eventStartTime: course!.startTime))
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 

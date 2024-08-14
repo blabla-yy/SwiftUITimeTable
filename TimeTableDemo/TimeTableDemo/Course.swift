@@ -22,8 +22,8 @@ class CourseGenerator: ObservableObject {
     func generateRandomCourses() {
         let calendar = Calendar.current
         let now = Date()
-        guard let sevenDaysAgo = calendar.date(byAdding: .day, value: -7, to: now),
-        let sevenDaysNext = calendar.date(byAdding: .day, value: 7, to: now) else { return }
+        guard let sevenDaysAgo = calendar.date(byAdding: .day, value: -4, to: now),
+        let sevenDaysNext = calendar.date(byAdding: .day, value: 4, to: now) else { return }
         
         // 随机生成课程的个数
         let numberOfCourses = Int.random(in: 20...30)

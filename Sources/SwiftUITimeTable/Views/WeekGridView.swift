@@ -4,7 +4,7 @@
 
 import SwiftUI
 
-struct WeekGridView<HeaderView, WeekView, EventView>: View
+public struct WeekGridView<HeaderView, WeekView, EventView>: View
     where WeekView: View, HeaderView: View, EventView: View
 {
     let weekGridItems: [GridItem]
@@ -21,7 +21,7 @@ struct WeekGridView<HeaderView, WeekView, EventView>: View
     let days: [Date]
     let timeRange: Range<Int>
     let weekRange: Range<Int>
-    init(
+    public init(
         date: Date,
         calendar: Calendar,
         weekGridAlignment: Alignment = .center,
@@ -73,7 +73,7 @@ struct WeekGridView<HeaderView, WeekView, EventView>: View
         self.weekRange = weekRange
     }
 
-    var body: some View {
+    public var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             headerView(date)
             LazyVGrid(columns: weekGridItems,
@@ -109,7 +109,6 @@ struct WeekGridView<HeaderView, WeekView, EventView>: View
                                   })
                               }
                               .frame(width: width, height: height)
-                              .clipped()
                           })
                           .frame(maxHeight: .infinity)
             }

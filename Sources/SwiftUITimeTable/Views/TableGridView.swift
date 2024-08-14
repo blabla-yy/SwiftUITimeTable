@@ -10,6 +10,7 @@ extension Date {
     }
 }
 
+#if os(iOS)
 class TimeTableState: ObservableObject {
     @Published var selected: Int = 0
     @Published var current: Date
@@ -237,3 +238,5 @@ struct SwiftUIView_Previews: PreviewProvider {
         }
     }
 }
+
+#endif

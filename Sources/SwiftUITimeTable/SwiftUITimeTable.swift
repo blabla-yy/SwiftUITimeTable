@@ -15,9 +15,9 @@ public struct CellInfo {
     
     
     public var borderEdge: [Edge] {
-        var edge = [Edge.leading, Edge.top]
-        if self.lastRow {
-            edge += [Edge.bottom]
+        var edge = [Edge.leading, Edge.bottom]
+        if self.firstRow {
+            edge += [Edge.top]
         }
         if self.lastColumn {
             edge += [Edge.trailing]
@@ -44,9 +44,9 @@ public struct CellInfo {
         let height = self.cellHeight ?? 0
         
         var eventHeight = height
-        if Calendar.current.isDate(self.date, equalTo: eventEndTime, toGranularity: .day) {
+        if Calendar.current.isDate(self.date, equalTo: eventEndTime, toGranularity: .day) && height != 0{
             let components = calendar.dateComponents([.minute], from: eventStartTime, to: eventEndTime)
-            eventHeight = CGFloat(components.minute ?? 0)
+            eventHeight = (CGFloat(components.minute ?? 0) / 60) * height
         }
         return eventHeight
     }

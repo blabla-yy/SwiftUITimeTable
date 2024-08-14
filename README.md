@@ -15,37 +15,36 @@
 ## 示例
 ```swift
 struct EventView: View {
+    let cell: CellInfo
     let course: CourseInfo?
     var existedCourse: CourseInfo {
         course!
     }
 
     var body: some View {
-        Group {
-            if course == nil {
-                Color.clear
-            } else {
-                VStack {
-                    VStack {
-                        Text(existedCourse.title)
-                            .font(.caption)
-                            .foregroundStyle(.white)
-                            .padding(.top, 4)
-                        
-                        Spacer()
+        ZStack {
+            Color.clear
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .border(width: 1, edges: cell.borderEdge, color: .gray)
+
+            if course != nil {
+                RoundedRectangle(cornerRadius: 6, style: .continuous)
+                    .fill(existedCourse.color)
+                    .frame(height: cell.eventHeight(eventStartTime: course!.startTime, eventEndTime: course!.endTime))
+                    .frame(maxWidth: .infinity)
+                    .overlay {
+                        VStack {
+                            Text(existedCourse.title)
+                                .font(.caption)
+                                .foregroundStyle(.white)
+                                .padding(.top, 4)
+                            Spacer()
+                        }
                     }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(
-                        RoundedRectangle(cornerRadius: 6, style: .continuous)
-                            .fill(existedCourse.color.opacity(0.5))
-                            .stroke(existedCourse.color)
-                    )
-                    .padding(2)
-                }
+                    .offset(y: cell.eventOffset(eventStartTime: course!.startTime))
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .border(.gray, width: 0.2)
     }
 }
 
@@ -59,10 +58,11 @@ struct ContentView: View {
     var body: some View {
         VStack {
             TimeTableView(
-                eventView: { event in
-                    EventView(course: course.findCourses(on: event.date, startingAt: event.startHour).first)
+                eventView: { cell in
+                    EventView(cell: cell, course: course.findCourses(on: cell.date, startingAt: cell.startHour).first)
                 },
-                timeRange: 8 ..< 22)
+                timeRange: 8 ..< 22
+            )
         }
         .padding()
     }
