@@ -8,10 +8,7 @@ import SwiftUITimeTable
 
 struct EventView: View {
     let cell: CellInfo
-    let course: CourseInfo?
-    var existedCourse: CourseInfo {
-        course!
-    }
+    let courses: [CourseInfo]
 
     var body: some View {
         ZStack {
@@ -19,21 +16,21 @@ struct EventView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .border(width: 1, edges: cell.borderEdge, color: .gray)
 
-            if course != nil {
+            ForEach(courses) {course in
                 RoundedRectangle(cornerRadius: 6, style: .continuous)
-                    .fill(existedCourse.color)
-                    .frame(height: cell.eventHeight(eventStartTime: course!.startTime, eventEndTime: course!.endTime))
+                    .fill(course.color)
+                    .frame(height: cell.eventHeight(eventStartTime: course.startTime, eventEndTime: course.endTime))
                     .frame(maxWidth: .infinity)
                     .overlay {
                         VStack {
-                            Text(existedCourse.title)
+                            Text(course.title)
                                 .font(.caption)
                                 .foregroundStyle(.white)
                                 .padding(.top, 4)
                             Spacer()
                         }
                     }
-                    .offset(y: cell.eventOffset(eventStartTime: course!.startTime))
+                    .offset(y: cell.eventOffset(eventStartTime: course.startTime))
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -49,12 +46,9 @@ struct ContentView: View {
 
     var body: some View {
         VStack {
-            TimeTableView(
-                eventView: { cell in
-                    EventView(cell: cell, course: course.findCourses(on: cell.date, startingAt: cell.startHour).first)
-                },
-                timeRange: 8 ..< 22
-            )
+            WeekGridView(date: .now) { cell in
+                EventView(cell: cell, courses: course.findCourses(on: cell.date, startingAt: cell.startHour))
+            }
         }
         .padding()
     }

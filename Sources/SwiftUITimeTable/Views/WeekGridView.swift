@@ -4,6 +4,75 @@
 
 import SwiftUI
 
+public extension WeekGridView where HeaderView == DefaultHeaderView, WeekView == DefaultWeekView {
+    init(date: Date,
+         eventCellHeight: CGFloat? = 80,
+         timeCellWidth: CGFloat = 40,
+         timeRange: Range<Int> = 0 ..< 25,
+         weekRange: Range<Int> = 1 ..< 8,
+         eventView: @escaping (CellInfo) -> EventView)
+    {
+        self.init(
+            date: date,
+            eventCellHeight: eventCellHeight,
+            timeCellWidth: timeCellWidth,
+            timeRange: timeRange,
+            weekRange: weekRange,
+            headerView: { DefaultHeaderView(date: $0) },
+            weekView: {
+                DefaultWeekView(date: $0)
+            },
+            eventView: eventView
+        )
+    }
+}
+
+public extension WeekGridView where HeaderView == DefaultHeaderView {
+    init(date: Date,
+         eventCellHeight: CGFloat? = 80,
+         timeCellWidth: CGFloat = 40,
+         timeRange: Range<Int> = 0 ..< 25,
+         weekRange: Range<Int> = 1 ..< 8,
+         weekView: @escaping (Date) -> WeekView,
+         eventView: @escaping (CellInfo) -> EventView)
+    {
+        self.init(
+            date: date,
+            eventCellHeight: eventCellHeight,
+            timeCellWidth: timeCellWidth,
+            timeRange: timeRange,
+            weekRange: weekRange,
+            headerView: { DefaultHeaderView(date: $0) },
+            weekView: weekView,
+            eventView: eventView
+        )
+    }
+}
+
+public extension WeekGridView where WeekView == DefaultWeekView {
+    init(date: Date,
+         eventCellHeight: CGFloat? = 80,
+         timeCellWidth: CGFloat = 40,
+         timeRange: Range<Int> = 0 ..< 25,
+         weekRange: Range<Int> = 1 ..< 8,
+         headerView: @escaping (Date) -> HeaderView,
+         eventView: @escaping (CellInfo) -> EventView)
+    {
+        self.init(
+            date: date,
+            eventCellHeight: eventCellHeight,
+            timeCellWidth: timeCellWidth,
+            timeRange: timeRange,
+            weekRange: weekRange,
+            headerView: headerView,
+            weekView: {
+                DefaultWeekView(date: $0)
+            },
+            eventView: eventView
+        )
+    }
+}
+
 public struct WeekGridView<HeaderView, WeekView, EventView>: View
     where WeekView: View, HeaderView: View, EventView: View
 {
@@ -23,7 +92,7 @@ public struct WeekGridView<HeaderView, WeekView, EventView>: View
     let weekRange: Range<Int>
     public init(
         date: Date,
-        calendar: Calendar,
+        calendar: Calendar = Calendar.current,
         weekGridAlignment: Alignment = .center,
         timeGridAlignment: Alignment = .center,
         eventGridAlignment: Alignment = .leading,
@@ -32,11 +101,11 @@ public struct WeekGridView<HeaderView, WeekView, EventView>: View
         weekCellHeight: CGFloat? = nil, // 第一行周信息高度
         cellWidth: CGFloat? = nil, // 格子宽度（除时间线）
         timeCellWidth: CGFloat = 40, // 时间格子宽度
+        timeRange: Range<Int> = 0 ..< 25,
+        weekRange: Range<Int> = 1 ..< 8, // 1: SUN, 7:SAT
         headerView: @escaping (Date) -> HeaderView,
         weekView: @escaping (Date) -> WeekView,
-        eventView: @escaping (CellInfo) -> EventView,
-        timeRange: Range<Int> = 0 ..< 25,
-        weekRange: Range<Int> = 1 ..< 8 // 1: SUN, 7:SAT
+        eventView: @escaping (CellInfo) -> EventView
     ) {
         let baseGridItem: GridItem
         if let width = cellWidth {
@@ -140,10 +209,7 @@ public extension View {
 
 struct WeekGridView_Previews: PreviewProvider {
     static var previews: some View {
-        WeekGridView(date: Date(), calendar: Calendar.current, headerView: { _ in EmptyView() }, weekView: {
-            date in
-            Text(Calendar.current.shortWeekdaySymbols[Calendar.current.component(.weekday, from: date) - 1])
-        }, eventView: { cell in
+        WeekGridView(date: Date(), timeRange: 8 ..< 22, eventView: { cell in
             Group {
                 ZStack {
                     Color.clear
@@ -155,8 +221,6 @@ struct WeekGridView_Previews: PreviewProvider {
                     }
                 }
             }
-            
-        },
-        timeRange: 8 ..< 22)
+        })
     }
 }

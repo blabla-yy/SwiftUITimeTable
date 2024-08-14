@@ -205,11 +205,9 @@ public struct TimeTableView<HeaderContent, WeekContent, EventContent>: View
                                  calendar: calendar,
                                  cellWidth: getCellWidth(reader.size.width),
                                  timeCellWidth: getEventCellWidth(reader.size.width),
-                                 headerView: headerView,
+                                 timeRange: timeRange, weekRange: weekRange, headerView: headerView,
                                  weekView: weekView,
-                                 eventView: eventView,
-                                 timeRange: timeRange,
-                                 weekRange: weekRange
+                                 eventView: eventView
                     )
                     .id(date)
                     .tag(date)
