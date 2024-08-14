@@ -79,7 +79,7 @@ extension TimeTableView where HeaderContent == DefaultHeaderView, EventContent =
 }
 
 extension TimeTableView where HeaderContent == DefaultHeaderView, WeekContent == DefaultWeekView {
-    public init(eventView: @escaping (EventInfo) -> EventContent,
+    public init(eventView: @escaping (CellInfo) -> EventContent,
                 eventCellHeight: CGFloat? = 80,
                 timeCellWidth: CGFloat? = nil,
                 timeRange: Range<Int> = 0 ..< 25,
@@ -96,7 +96,7 @@ extension TimeTableView where HeaderContent == DefaultHeaderView, WeekContent ==
 
 extension TimeTableView where HeaderContent == DefaultHeaderView {
     public init(weekView: @escaping (Date) -> WeekContent,
-                eventView: @escaping (EventInfo) -> EventContent,
+                eventView: @escaping (CellInfo) -> EventContent,
                 eventCellHeight: CGFloat? = 80,
                 timeCellWidth: CGFloat? = nil,
                 timeRange: Range<Int> = 0 ..< 25,
@@ -113,7 +113,7 @@ extension TimeTableView where HeaderContent == DefaultHeaderView {
 
 extension TimeTableView where WeekContent == DefaultWeekView {
     public init(headerView: @escaping (Date) -> HeaderContent,
-                eventView: @escaping (EventInfo) -> EventContent,
+                eventView: @escaping (CellInfo) -> EventContent,
                 eventCellHeight: CGFloat? = 80,
                 timeCellWidth: CGFloat? = nil,
                 timeRange: Range<Int> = 0 ..< 25,
@@ -149,7 +149,7 @@ public struct TimeTableView<HeaderContent, WeekContent, EventContent>: View
     where HeaderContent: View, WeekContent: View, EventContent: View {
     public typealias HeaderGen = (Date) -> HeaderContent
     public typealias WeekGen = (Date) -> WeekContent
-    public typealias EventGen = (EventInfo) -> EventContent
+    public typealias EventGen = (CellInfo) -> EventContent
 
     @StateObject var timeTableState: TimeTableState
     @Environment(\.calendar) var calendar

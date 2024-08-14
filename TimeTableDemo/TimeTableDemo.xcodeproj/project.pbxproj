@@ -61,9 +61,9 @@
 			children = (
 				75CB0F452B4FD96400EDB750 /* TimeTableDemoApp.swift */,
 				75CB0F472B4FD96400EDB750 /* ContentView.swift */,
+				750A5EAB2B4FEC7F001B292A /* Course.swift */,
 				75CB0F492B4FD96700EDB750 /* Assets.xcassets */,
 				75CB0F4B2B4FD96700EDB750 /* Preview Content */,
-				750A5EAB2B4FEC7F001B292A /* Course.swift */,
 			);
 			path = TimeTableDemo;
 			sourceTree = "<group>";
