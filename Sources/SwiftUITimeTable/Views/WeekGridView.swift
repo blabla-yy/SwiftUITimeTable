@@ -120,10 +120,11 @@ public struct WeekGridView<HeaderView, WeekView, EventView>: View
         var eventGridItem = baseGridItem
         eventGridItem.alignment = eventGridAlignment
 
-        let dayOfWeek = calendar.component(.weekday, from: date)
-        let weekdays = calendar.range(of: .weekday, in: .weekOfYear, for: date)!
+        let startOfDay = calendar.startOfDay(for: date)
+        let dayOfWeek = calendar.component(.weekday, from: startOfDay)
+        let weekdays = calendar.range(of: .weekday, in: .weekOfYear, for: startOfDay)!
         let days = (weekdays.lowerBound ..< weekdays.upperBound)
-            .compactMap { calendar.date(byAdding: .day, value: $0 - dayOfWeek, to: date) }
+            .compactMap { calendar.date(byAdding: .day, value: $0 - dayOfWeek, to: startOfDay) }
             .filter { day in
                 weekRange.contains(calendar.component(.weekday, from: day))
             }
@@ -132,7 +133,7 @@ public struct WeekGridView<HeaderView, WeekView, EventView>: View
         self.headerView = headerView
         self.weekView = weekView
         self.eventView = eventView
-        self.date = date
+        self.date = startOfDay
         weekGridItems = [timeGridItem] + .init(repeating: weekGridItem, count: weekRange.count)
         eventGridItems = [timeGridItem] + .init(repeating: eventGridItem, count: weekRange.count)
         height = eventCellHeight
